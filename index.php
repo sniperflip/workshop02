@@ -1,70 +1,49 @@
-<?php
-    if(isset($_POST['submit'])) {
-        $guess = $_POST['guess'];
-        $count = isset($_POST['count']) ? $_POST['count']:0;
-        $count++;
-    }
-?>
-<html>
-<head>
-<title>Guess the Word Game</title>
-</head>
-<h3>by: Johann N. Trocio </h3>
-<body>
+ <?php
+ 
+ session_start();
 
-<div id = "header">
-</div>
-
-<div id = "word">
-<?php
-
-//create array
-$words = array("aardvarks", "determine", "different", "greatness", "miserable");
-
-$random = array_rand($words);
-//choose a random word from array
-$newWord = $words[$random];
-
-$change = str_split($newWord);
-//prints out array
-/*foreach($change as $list) {
-    echo $list;
-}*/
-$masked = str_replace($change, '*', $change);
-//prints masked array
-foreach($masked as $hide) {
-echo $hide;
-}
-
-?>
-</div>
-
-<div id = "guess">
-
-<form name="guessLetter" method="POST" action=""
-<p>Please input your guess below</p>
-<input type="text" name="guess" id="guess"/><br />
-
-<input type="hidden" name="count" id="count" value="<?php echo $count; ?>" />
-
-<?php
-
-?>
-
-<input type="submit" name="submit" id="submit" value="Submit" />
-
+ if(!isset($_GET['guess'])){
+	 echo("Please Input Value");
+	  $_SESSION["counter"] = 0;
+ }else if (strlen($_GET['guess'])< 1 ) {
+	 echo("Your Guess is too short"); 
+	 $_SESSION["counter"]++;
+ }else if ( ! is_numeric($_GET['guess'])) {
+	 echo("Your Guess is not a number");
+	 $_SESSION["counter"]++;
+ }else if ($_GET['guess'] < 42) {
+	 echo("Your Guess is too low");
+	 $_SESSION["counter"]++;
+ }else if ($_GET['guess'] > 42) {
+	 echo("Your Guess is too high");
+	 $_SESSION["counter"]++;
+ } else{
+	 echo("Congratulation - Your Right!!!");
+	 unset($_SESSION["counter"]);
+	 session_destroy();
+ }
+ if ($_SESSION["counter"]==5) {
+	echo "You have 5 tries already";
+	echo "<h1>Game is over</h1>";
+	unset($_SESSION["counter"]);
+	session_destroy();
+	echo "<a href='guess.php'>Play AGain</a>"; 
+	
+ }	 
+ ?>
+ <html>
+ <head>
+ <title>Johann N. Trocio</title>
+ </head>
+ <body>
+ <h1>Welcome to my guessing game</h1>
+ <p>
+ <form method="GET">
+<p><label for= "guess">Input Guess</label>
+<input type="text" name="guess" size="40" id="guess"/></p>
+<input type="submit" name="submit"/>
 </form>
 
-<?php
-
-if(isset($_POST['submit'])) {
-
-    echo "Guess: ".$guess."<br />";
-    echo "Count: ".$count;
-}
-
-?>
-
-</div>
-</body>
-</html>
+ </p>
+ </body>
+ </html>
